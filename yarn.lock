@@ -100,10 +100,10 @@
   resolved "https://registry.yarnpkg.com/@humanwhocodes/object-schema/-/object-schema-1.2.0.tgz#87de7af9c231826fdd68ac7258f77c429e0e5fcf"
   integrity sha512-wdppn25U8z/2yiaT6YGquE6X8sSv7hNMWSXYSSU1jGv/yd6XqjXgTDJ8KP4NgjTXfJ3GbRjeeb8RTV7a/VpM+w==
 
-"@napi-rs/cli@^1.2.1":
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/@napi-rs/cli/-/cli-1.2.1.tgz#eccdf9e0835aec3adcef30074bf69c110ea65960"
-  integrity sha512-7FoYn1JSK5rTIG9KcKfYnZL/O0UjUMMuzZCXd//bJdkLw0Xx9EqQJs1X/Mg4KqywJYb79LDfxRMiJRSukPGDNw==
+"@napi-rs/cli@^1.3.0":
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/@napi-rs/cli/-/cli-1.3.0.tgz#fa9182a862510c741887fb05faa9a19cb780d0a3"
+  integrity sha512-zWHZFwtdv2hkUwhxddgkwnU9xht9JJKqhfDEiWlrFRqI99Fq92qfsr4byfZR3v4B4iENjKR8V3H+Aip1ASSh6Q==
 
 "@napi-rs/triples@^1.0.3":
   version "1.0.3"
