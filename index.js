@@ -2,10 +2,10 @@ const { loadBinding } = require('@node-rs/helper')
 
 /**
  * __dirname means load native addon from current dir
- * 'package-template' means native addon name is `package-template`
+ * 'wallet-rs' means native addon name is `wallet-rs`
  * the first arguments was decided by `napi.name` field in `package.json`
  * the second arguments was decided by `name` field in `package.json`
- * loadBinding helper will load `package-template.[PLATFORM].node` from `__dirname` first
- * If failed to load addon, it will fallback to load from `@napi-rs/package-template-[PLATFORM]`
+ * loadBinding helper will load `wallet-rs.[PLATFORM].node` from `__dirname` first
+ * If failed to load addon, it will fallback to load from `@jolocom/wallet-rs-[PLATFORM]`
  */
-module.exports = loadBinding(__dirname, 'package-template', '@napi-rs/package-template')
+module.exports = loadBinding(__dirname, 'wallet-rs', '@jolocom/wallet-rs')
