@@ -18,6 +18,15 @@ struct Wallet{
   unlocked: Arc<RefCell<UnlockedWallet>>
 }
 
+/// Unlocks locked and encoded wallet into UnlockedWallet instance
+/// # Parameters
+/// * `locked_wallet` - Base64URL encoded encrypted wallet
+/// * `login` - [String] id under which wallet was encrypted 
+/// * `pass` - [Base64 encoded String] password to unlock wallet
+///
+/// Wallet will be instantiated into JsObject, which then can be used
+///   for further calls. Details: https://napi.rs/concepts/wrap
+///
 #[js_function(1)]
 fn attach_wallet(ctx: CallContext) -> Result<JsUndefined> {
     // can be optimized using buffers instead Strings
