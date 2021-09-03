@@ -1,11 +1,9 @@
 #![deny(clippy::all)]
-
 #[macro_use]
 extern crate napi_derive;
-
-use std::convert::TryInto;
-
-use napi::{CallContext, Env, JsNumber, JsObject, Result, Task};
+use std::{cell::RefCell, convert::TryInto, sync::Arc};
+use napi::{CallContext, Env, JsNumber, JsObject, JsString, JsUndefined, Result, Task};
+use universal_wallet::{locked::LockedWallet, unlocked::UnlockedWallet};
 
 #[cfg(all(
   any(windows, unix),
@@ -16,43 +14,66 @@ use napi::{CallContext, Env, JsNumber, JsObject, Result, Task};
 #[global_allocator]
 static ALLOC: mimalloc::MiMalloc = mimalloc::MiMalloc;
 
-struct AsyncTask(u32);
+struct Wallet{
+  unlocked: Arc<RefCell<UnlockedWallet>>
+}
 
-impl Task for AsyncTask {
-  type Output = u32;
-  type JsValue = JsNumber;
+#[js_function(1)]
+fn attach_wallet(ctx: CallContext) -> Result<JsUndefined> {
+    // can be optimized using buffers instead Strings
+    let locked_wallet = ctx.get::<JsString>(0)?.into_utf8()?;
+    let login = ctx.get::<JsString>(1)?.into_utf8()?;
+    let pass = ctx.get::<JsString>(2)?.into_utf8()?;
 
-  fn compute(&mut self) -> Result<Self::Output> {
-    use std::thread::sleep;
-    use std::time::Duration;
-    sleep(Duration::from_millis(self.0 as u64));
-    Ok(self.0 * 2)
-  }
+    let mut this: JsObject = ctx.this_unchecked();
 
-  fn resolve(self, env: Env, output: Self::Output) -> Result<Self::JsValue> {
-    env.create_uint32(output)
-  }
+    let wallet =  LockedWallet::new(
+      &login.as_str()?,
+      decode_b64(locked_wallet.as_str()?)?
+    );
+    ctx
+      .env
+      .wrap(
+        &mut this,
+        Wallet{ 
+          unlocked: Arc::new(RefCell::new(
+            wallet.unlock(&decode_b64(pass.as_str()?)?)
+              .map_err(|e| napi::Error::from_reason(e.to_string()))?
+          )
+        )
+      })?;
+    ctx.env.get_undefined()
+}
+
+/// Locks wallet and returns locked wallet as B64URL string
+/// # Parameters
+/// * `pass` - password for locking. must be B64URL encoded
+///
+#[js_function(1)]
+fn detach_wallet(ctx: CallContext) -> Result<JsString> {
+    // can be optimized using buffer instead String
+    let pass = ctx.get::<JsString>(0)?.into_utf8()?;
+
+    let mut this: JsObject = ctx.this_unchecked();
+
+    let unlocked = ctx.env.unwrap::<UnlockedWallet>(&mut this)?;
+    let locked = unlocked.lock(&decode_b64(pass.as_str()?)?)
+        .map_err(|e| napi::Error::from_reason(e.to_string()))?;
+    ctx.env.create_string(
+      &base64::encode_config(locked.ciphertext,
+        base64::URL_SAFE)
+    )
+}
+
+fn decode_b64(data: &str) -> Result<Vec<u8>> {
+      base64::decode_config(data, base64::URL_SAFE)
+          .map_err(|e| napi::Error::from_reason(e.to_string()))
 }
 
 #[module_exports]
 fn init(mut exports: JsObject) -> Result<()> {
-  exports.create_named_method("sync", sync_fn)?;
+  exports.create_named_method("attach", attach_wallet)?;
 
-  exports.create_named_method("sleep", sleep)?;
+  exports.create_named_method("detach", detach_wallet)?;
   Ok(())
-}
-
-#[js_function(1)]
-fn sync_fn(ctx: CallContext) -> Result<JsNumber> {
-  let argument: u32 = ctx.get::<JsNumber>(0)?.try_into()?;
-
-  ctx.env.create_uint32(argument + 100)
-}
-
-#[js_function(1)]
-fn sleep(ctx: CallContext) -> Result<JsObject> {
-  let argument: u32 = ctx.get::<JsNumber>(0)?.try_into()?;
-  let task = AsyncTask(argument);
-  let async_task = ctx.env.spawn(task)?;
-  Ok(async_task.promise_object())
 }

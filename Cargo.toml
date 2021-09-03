@@ -12,6 +12,8 @@ crate-type = ["cdylib"]
 [dependencies]
 napi = "1"
 napi-derive = "1"
+universal_wallet = { version = "0.5", features = ["didcomm"] }
+base64 = "0.13"
 
 [target.'cfg(all(any(windows, unix), target_arch = "x86_64", not(target_env = "musl")))'.dependencies]
 mimalloc = {version = "0.1"}
