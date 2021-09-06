@@ -61,9 +61,7 @@ fn detach_wallet(ctx: CallContext) -> Result<JsString> {
     // can be optimized using buffer instead String
     let pass = ctx.get::<JsString>(0)?.into_utf8()?;
 
-    let mut this: JsObject = ctx.this_unchecked();
-
-    let wallet = ctx.env.unwrap::<Wallet>(&mut this)?;
+    let wallet = get_wallet_from_context(&ctx)?;
     let locked = wallet.unlocked.lock(&decode_b64(pass.as_str()?)?)
         .map_err(|e| napi::Error::from_reason(e.to_string()))?;
     ctx.env.create_string(
@@ -115,8 +113,7 @@ fn new_x25519_key(ctx: CallContext) -> Result<JsUndefined> {
 fn add_key_by_ctx(ctx: CallContext, key_type: KeyType)
   -> Result<JsUndefined> {
     let controller = ctx.get::<JsString>(0)?.into_utf8()?;
-    let mut this: JsObject = ctx.this_unchecked();
-    let wallet = ctx.env.unwrap::<Wallet>(&mut this)?;
+    let wallet = get_wallet_from_context(&ctx)?;
     match wallet.unlocked.new_key(key_type, Some(vec!(controller.as_str()?.into()))) {
       Err(e) => Err(napi::Error::from_reason(e.to_string())),
       _ => ctx.env.get_undefined()
@@ -132,9 +129,9 @@ fn add_key_by_ctx(ctx: CallContext, key_type: KeyType)
 ///
 #[js_function(1)]
 fn new_wallet(ctx: CallContext) -> Result<JsUndefined> {
-  // can be optimized using buffers instead String
   let mut this: JsObject = ctx.this_unchecked();
 
+  // can be optimized using buffers instead String
   let login = ctx.get::<JsString>(0)?.into_utf8()?;
    ctx
     .env
@@ -143,6 +140,65 @@ fn new_wallet(ctx: CallContext) -> Result<JsUndefined> {
       Wallet { unlocked: UnlockedWallet::new(login.as_str()?) }
     )?;
   ctx.env.get_undefined()
+}
+
+/// Fetch key as `ContentEntry` from the wallet into JS
+/// # Parameters
+/// * `key_ref` - [String] search string to the key to fetch
+/// * `mut output` - [JsObject] where search result will be stored to
+///
+#[js_function(2)]
+fn get_key(ctx: CallContext) -> Result<JsUndefined> {
+    let wallet = get_wallet_from_context(&ctx)?;
+    let key_ref = ctx.get::<JsString>(0)?.into_utf8()?;
+    let mut output = ctx.get::<JsObject>(1)?;
+    ctx
+      .env
+      .wrap(
+        &mut output,
+        wallet.unlocked.get_key(key_ref.as_str()?)
+      )?;
+    ctx.env.get_undefined()
+}
+
+/// Fetch key as `ContentEntry` from the wallet into JS by controller
+/// # Parameters
+/// * `controller` - [String] of the controller we want to get content for
+/// * `&mut output` - [JsObject] where search result will be stored to
+///
+#[js_function(2)]
+fn get_key_by_controller(ctx: CallContext) -> Result<JsUndefined> {
+    let wallet = get_wallet_from_context(&ctx)?;
+    let controller = ctx.get::<JsString>(0)?.into_utf8()?;
+    let mut output = ctx.get::<JsObject>(1)?;
+    ctx
+      .env
+      .wrap(
+        &mut output,
+        wallet.unlocked.get_key_by_controller(controller.as_str()?)
+      )?;
+    ctx.env.get_undefined()
+}
+
+/// Sets controller of `key_ref` to `controller` value
+/// # Parameters
+/// * `key_ref` - [String] search string for key to update
+/// * `controller` - [String] new value for the controller of the key
+///
+/// Will return error if any of the parameters is an empty string
+///
+#[js_function(2)]
+fn set_key_controller(ctx: CallContext) -> Result<JsUndefined> {
+    let wallet = get_wallet_from_context(&ctx)?;
+    let key_ref = ctx.get::<JsString>(0)?.into_utf8()?;
+    let controller = ctx.get::<JsString>(1)?.into_utf8()?;
+    if key_ref.as_str()?.is_empty() || controller.as_str()?.is_empty() {
+        return Err(napi::Error::from_reason("parameters cannot be empty strings".into()))
+    }
+    match wallet.unlocked.set_key_controller(key_ref.as_str()?, controller.as_str()?) {
+        Some(()) => ctx.env.get_undefined(),
+        None => Err(napi::Error::from_reason(format!("no key found for {}", key_ref.as_str()?)))
+    }
 }
 
 #[module_exports]
@@ -158,7 +214,15 @@ fn init(mut exports: JsObject) -> Result<()> {
   exports.create_named_method("newRsaVerificationKey", new_rsa_verification_key)?;
   exports.create_named_method("newSchnorrSecp256k1Key", new_schnorr_secp256k1_verification_key)?;
   exports.create_named_method("newX25519Key", new_x25519_key)?;
+  exports.create_named_method("getKey", get_key)?;
+  exports.create_named_method("getKeyByController", get_key_by_controller)?;
+  exports.create_named_method("setKeyController", set_key_controller)?;
   Ok(())
+}
+
+fn get_wallet_from_context<'ctx>(ctx: &'ctx CallContext) -> Result<&'ctx mut Wallet> {
+    let mut this: JsObject = ctx.this_unchecked();
+    ctx.env.unwrap::<Wallet>(&mut this)
 }
 
 fn decode_b64(data: &str) -> Result<Vec<u8>> {
