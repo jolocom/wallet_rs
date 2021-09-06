@@ -1,3 +1,3 @@
-export const sync: (input: number) => number
-// sleep [duration] ms, return Promise which resolved 2 * duration
-export const sleep: (duration: number) => Promise<number>
+export const attach: (locked_wallet: string, login: string, pass: string) => undefined
+export const detach: (pass: string) => string
+export const newEcdsaSecp1Key: (controller: string) => undefined

@@ -27,7 +27,7 @@ struct Wallet{
 /// Wallet will be instantiated into JsObject, which then can be used
 ///   for further calls. Details: https://napi.rs/concepts/wrap
 ///
-#[js_function(1)]
+#[js_function(3)]
 fn attach_wallet(ctx: CallContext) -> Result<JsUndefined> {
     // can be optimized using buffers instead Strings
     let locked_wallet = ctx.get::<JsString>(0)?.into_utf8()?;
@@ -164,4 +164,13 @@ fn init(mut exports: JsObject) -> Result<()> {
 fn decode_b64(data: &str) -> Result<Vec<u8>> {
       base64::decode_config(data, base64::URL_SAFE)
           .map_err(|e| napi::Error::from_reason(e.to_string()))
+}
+
+
+#[test]
+fn b64_test() {
+  let conv = base64::encode_config("alice", base64::URL_SAFE);
+  assert_eq!("YWxpY2U=", &conv);
+  let dec = base64::decode_config("YWxpY2U=", base64::URL_SAFE).unwrap();
+  assert_eq!("alice", &String::from_utf8(dec).unwrap());
 }

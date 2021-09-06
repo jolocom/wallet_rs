@@ -96,10 +96,12 @@
     ]
   },
   "ava": {
+    "files": ["./*test.js", "./*test.ts"],
     "require": [
       "@swc-node/register"
     ],
     "extensions": [
+      "js",
       "ts"
     ],
     "environmentVariables": {
