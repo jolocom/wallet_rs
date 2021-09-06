@@ -96,7 +96,9 @@
     ]
   },
   "ava": {
-    "files": ["./*test.js", "./*test.ts"],
+    "files": [
+      "test/**/*test.(ts|js)"
+    ],
     "require": [
       "@swc-node/register"
     ],
