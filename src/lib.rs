@@ -5,6 +5,8 @@ extern crate napi_derive;
 use napi::{CallContext, JsArrayBuffer, JsBuffer, JsObject, JsString, JsUndefined, Result};
 use universal_wallet::{locked::LockedWallet, prelude::KeyType, unlocked::UnlockedWallet};
 
+mod didcomm;
+
 #[cfg(all(
   any(windows, unix),
   target_arch = "x86_64",
@@ -292,10 +294,13 @@ fn init(mut exports: JsObject) -> Result<()> {
   exports.create_named_method("signRaw", sign_raw)?;
   exports.create_named_method("decrypt", decrypt)?;
   exports.create_named_method("ecdhKeyAgreement", ecdh_key_agreement)?;
+  exports.create_named_method("createMessage", didcomm::create_message)?;
+  exports.create_named_method("sealEncrypted", didcomm::seal_encrypted)?;
+  exports.create_named_method("receiveMessage", didcomm::receive_message)?;
   Ok(())
 }
 
-fn get_wallet_from_context<'ctx>(ctx: &'ctx CallContext) -> Result<&'ctx mut Wallet> {
+pub(crate) fn get_wallet_from_context<'ctx>(ctx: &'ctx CallContext) -> Result<&'ctx mut Wallet> {
     let mut this: JsObject = ctx.this_unchecked();
     ctx.env.unwrap::<Wallet>(&mut this)
 }
@@ -304,7 +309,6 @@ fn decode_b64(data: &str) -> Result<Vec<u8>> {
       base64::decode_config(data, base64::URL_SAFE)
           .map_err(|e| napi::Error::from_reason(e.to_string()))
 }
-
 
 #[test]
 fn b64_test() {
