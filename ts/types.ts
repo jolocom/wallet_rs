@@ -1,4 +1,4 @@
-declare const wallet: {
+export interface NativeBindings {
   /**
    * Unlocks locked and encoded wallet into UnlockedWallet instance.
    *
@@ -7,7 +7,7 @@ declare const wallet: {
    * @param {string} password Base64 encoded password to unlock wallet.
    * @return {void}
    */
-  attach: (lockedWallet: string, login: string, password: string) => void
+  attach(lockedWallet: string, login: string, password: string): void
 
   /**
    * Locks wallet and returns locked wallet as B64URL string.
@@ -15,7 +15,7 @@ declare const wallet: {
    * @param {string} password The password for locking. Must be B64URL encoded.
    * @return {string} Locked wallet as B64URL string.
    */
-  detach: (password: string) => string
+  detach(password: string): string
 
   /**
    * Instantiates new and empty wallet into JS context.
@@ -23,7 +23,7 @@ declare const wallet: {
    * @param {string} id The id of newly created wallet. Used later to lock/unlock the wallet.
    * @return {void}
    */
-  create: (id: string) => void
+  create(id: string): void
 
   /**
    * Adds key pair of selected type to unlocked wallet.
@@ -31,7 +31,7 @@ declare const wallet: {
    * @param {string} controller The name of the key controller.
    * @return {void}
    */
-  newEcdsaSecp1Key: (controller: string) => void
+  newEcdsaSecp1Key(controller: string): void
 
   /**
    * Adds key pair of selected type to unlocked wallet.
@@ -39,7 +39,7 @@ declare const wallet: {
    * @param {string} controller The name of the key controller.
    * @return {void}
    */
-  newEcdsaRecoveryKey: (controller: string) => void
+  newEcdsaRecoveryKey(controller: string): void
 
   /**
    * Adds key pair of selected type to unlocked wallet.
@@ -47,7 +47,7 @@ declare const wallet: {
    * @param {string} controller The name of the key controller.
    * @return {void}
    */
-  newEd256VerificationKey: (controller: string) => void
+  newEd256VerificationKey(controller: string): void
 
   /**
    * Adds key pair of selected type to unlocked wallet.
@@ -55,7 +55,7 @@ declare const wallet: {
    * @param {string} controller The name of the key controller.
    * @return {void}
    */
-  newGpgVerificationKey: (controller: string) => void
+  newGpgVerificationKey(controller: string): void
 
   /**
    * Adds key pair of selected type to unlocked wallet.
@@ -63,7 +63,7 @@ declare const wallet: {
    * @param {string} controller The name of the key controller.
    * @return {void}
    */
-  newJwsVerificationKey: (controller: string) => void
+  newJwsVerificationKey(controller: string): void
 
   /**
    * Adds key pair of selected type to unlocked wallet.
@@ -71,7 +71,7 @@ declare const wallet: {
    * @param {string} controller The name of the key controller.
    * @return {void}
    */
-  newRsaVerificationKey: (controller: string) => void
+  newRsaVerificationKey(controller: string): void
 
   /**
    * Adds key pair of selected type to unlocked wallet.
@@ -79,7 +79,7 @@ declare const wallet: {
    * @param {string} controller The name of the key controller.
    * @return {void}
    */
-  newSchnorrSecp256k1Key: (controller: string) => void
+  newSchnorrSecp256k1Key(controller: string): void
 
   /**
    * Adds key pair of selected type to unlocked wallet.
@@ -87,7 +87,7 @@ declare const wallet: {
    * @param {string} controller The name of the key controller.
    * @return {void}
    */
-  newX25519Key: (controller: string) => void
+  newX25519Key(controller: string): void
 
   /**
    * Fetch key as `ContentEntry` from the wallet into JS.
@@ -96,7 +96,7 @@ declare const wallet: {
    * @param {object} output Where search result will be stored to.
    * @return {void}
    */
-  getKey: (keyReference: string, output: object) => void
+  getKey(keyReference: string, output: object): void
 
   /**
    * Fetch key as `ContentEntry` from the wallet into JS by controller.
@@ -105,17 +105,15 @@ declare const wallet: {
    * @param {object} output Where search result will be stored to.
    * @return {void}
    */
-  getKeyByController: (controller: string, output: object) => void
+  getKeyByController(controller: string, output: object): void
 
   /**
    * Sets controller of `keyReference` to `controller` value.
    *
    * @param {string} keyReference Search string for key to update.
    * @param {string} controller The new value for the controller of the key.
-   * @throws Error If any of the parameters is an empty string.
+   * @throws {Error} If any of the parameters is an empty string.
    * @return {void}
    */
-  setKeyController: (keyReference: string, controller: string) => void
+  setKeyController(keyReference: string, controller: string): void
 }
-
-export default wallet
