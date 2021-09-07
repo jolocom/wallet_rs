@@ -297,6 +297,10 @@ fn init(mut exports: JsObject) -> Result<()> {
   exports.create_named_method("createMessage", didcomm::create_message)?;
   exports.create_named_method("sealEncrypted", didcomm::seal_encrypted)?;
   exports.create_named_method("receiveMessage", didcomm::receive_message)?;
+  exports.create_named_method("sealJsonMessageJwe", didcomm::seal_encrypted_str)?;
+  exports.create_named_method("sealJsonMessageJws", didcomm::seal_signed_str)?;
+  exports.create_named_method("createXc20pJwe", didcomm::create_xc20p_jwe)?;
+  exports.create_named_method("createAes256GcmJwe", didcomm::create_aes256gcm_jwe)?;
   Ok(())
 }
 
