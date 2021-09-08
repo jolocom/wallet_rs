@@ -2,8 +2,10 @@
 #[macro_use]
 extern crate napi_derive;
 
-use napi::{CallContext, JsObject, JsString, JsUndefined, Result};
+use napi::{CallContext, JsArrayBuffer, JsBuffer, JsObject, JsString, JsUndefined, Result};
 use universal_wallet::{locked::LockedWallet, prelude::KeyType, unlocked::UnlockedWallet};
+
+mod didcomm;
 
 #[cfg(all(
   any(windows, unix),
@@ -201,6 +203,78 @@ fn set_key_controller(ctx: CallContext) -> Result<JsUndefined> {
     }
 }
 
+/// Sign arbitrary data with referred key and return signature
+/// # Parameters
+/// * `key_ref` - [String] key identifier for which key to use for signing
+/// * `data` - [Buffer of bytes \ &[u8]] data to be signed
+///
+/// Returns `JsArrayBuffer` with signature on success or error otherwise.
+///
+#[js_function(2)]
+fn sign_raw(ctx: CallContext) -> Result<JsArrayBuffer> {
+    let wallet = get_wallet_from_context(&ctx)?;
+    let key_ref = ctx.get::<JsString>(0)?.into_utf8()?;
+    let data = &ctx.get::<JsBuffer>(1)?.into_value()?;
+    if key_ref.as_str()?.is_empty() {
+        return Err(napi::Error::from_reason("key ref cannot be empty string".into()));
+    } else if data.len() == 0 {
+        return Err(napi::Error::from_reason("can not sign empty data".into()));
+    }
+    let signature = wallet.unlocked.sign_raw(key_ref.as_str()?, data)
+        .map_err(|e| napi::Error::from_reason(e.to_string()))?;
+    Ok(ctx.env.create_arraybuffer_with_data(signature)?.into_raw())
+}
+
+/// Decrypts provided cypher text using desired key by reference
+///
+/// # Parameters
+///
+/// * key_ref - [String] key to be fetched to use for decryption
+/// * data - [Buffer of bytes \ &[u8]] cipher to be decrypted
+/// * aad - [Buffer of bytes \ &[u8]] `Option` to be used for AAD algorithm
+///
+/// Return `JsArrayBuffer` with decrypted data on success or error otherwise. 
+///
+#[js_function(3)]
+fn decrypt(ctx: CallContext) -> Result<JsArrayBuffer> {
+    let wallet = get_wallet_from_context(&ctx)?;
+    let key_ref = ctx.get::<JsString>(0)?.into_utf8()?;
+    let data = &ctx.get::<JsBuffer>(1)?.into_value()?;
+    let js_aad = ctx.get::<JsBuffer>(2)?.into_value();
+    let aad = match &js_aad {
+        Ok(v) => Some(v.as_ref()),
+        Err(_) => None
+    };
+    let decrypted = wallet.unlocked.decrypt(key_ref.as_str()?, data, aad)
+        .map_err(|e| napi::Error::from_reason(e.to_string()))?;
+    Ok(ctx.env.create_arraybuffer_with_data(decrypted)?.into_raw())
+}
+
+/// Performs ECDH Key Agreement
+///
+/// # Parameters
+///
+/// * key_ref - [String] our private key ref for ECDH
+/// * other - [Buffer of bytes \ &[u8]] other public key for ECDH
+///
+/// Return `JsArrayBuffer` with key agreement resulting key on success
+///   or error otherwise.
+///
+#[js_function(2)]
+fn ecdh_key_agreement(ctx: CallContext) -> Result<JsArrayBuffer> {
+    let wallet = get_wallet_from_context(&ctx)?;
+    let key_ref = ctx.get::<JsString>(0)?.into_utf8()?;
+    let other = &ctx.get::<JsBuffer>(1)?.into_value()?;
+    if key_ref.as_str()?.is_empty() {
+        return Err(napi::Error::from_reason("key_ref can not be empty".into()));
+    } else if other.len() == 0 {
+        return Err(napi::Error::from_reason("can not agree with empty key".into()));
+    }
+    let agreement = wallet.unlocked.ecdh_key_agreement(key_ref.as_str()?, other)
+        .map_err(|e| napi::Error::from_reason(e.to_string()))?;
+    Ok(ctx.env.create_arraybuffer_with_data(agreement)?.into_raw())
+}
+
 #[module_exports]
 fn init(mut exports: JsObject) -> Result<()> {
   exports.create_named_method("attach", attach_wallet)?;
@@ -217,10 +291,20 @@ fn init(mut exports: JsObject) -> Result<()> {
   exports.create_named_method("getKey", get_key)?;
   exports.create_named_method("getKeyByController", get_key_by_controller)?;
   exports.create_named_method("setKeyController", set_key_controller)?;
+  exports.create_named_method("signRaw", sign_raw)?;
+  exports.create_named_method("decrypt", decrypt)?;
+  exports.create_named_method("ecdhKeyAgreement", ecdh_key_agreement)?;
+  exports.create_named_method("createMessage", didcomm::create_message)?;
+  exports.create_named_method("sealEncrypted", didcomm::seal_encrypted)?;
+  exports.create_named_method("receiveMessage", didcomm::receive_message)?;
+  exports.create_named_method("sealJsonMessageJwe", didcomm::seal_encrypted_str)?;
+  exports.create_named_method("sealJsonMessageJws", didcomm::seal_signed_str)?;
+  exports.create_named_method("createXc20pJwe", didcomm::create_xc20p_jwe)?;
+  exports.create_named_method("createAes256GcmJwe", didcomm::create_aes256gcm_jwe)?;
   Ok(())
 }
 
-fn get_wallet_from_context<'ctx>(ctx: &'ctx CallContext) -> Result<&'ctx mut Wallet> {
+pub(crate) fn get_wallet_from_context<'ctx>(ctx: &'ctx CallContext) -> Result<&'ctx mut Wallet> {
     let mut this: JsObject = ctx.this_unchecked();
     ctx.env.unwrap::<Wallet>(&mut this)
 }
@@ -229,7 +313,6 @@ fn decode_b64(data: &str) -> Result<Vec<u8>> {
       base64::decode_config(data, base64::URL_SAFE)
           .map_err(|e| napi::Error::from_reason(e.to_string()))
 }
-
 
 #[test]
 fn b64_test() {
