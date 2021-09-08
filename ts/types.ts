@@ -116,4 +116,106 @@ export interface NativeBindings {
    * @return {void}
    */
   setKeyController(keyReference: string, controller: string): void
+
+  /**
+   * Sign arbitrary data with referred key and return signature.
+   *
+   * @param {string} keyReference Key identifier for which key to use for signing.
+   * @param {Buffer} subject Data to be signed.
+   * @throws {Error} If signing process unsuccessful (Provided reference is empty string or data to sign is empty).
+   * @returns {ArrayBuffer} {@link ArrayBuffer} with signature.
+   */
+  signRaw(keyReference: string, subject: Buffer): ArrayBuffer
+
+  /**
+   * Decrypts provided cypher text using desired key by reference.
+   *
+   * @param {string} keyReference The key to be fetched to use for decryption.
+   * @param {Buffer} subject The cipher to be decrypted.
+   * @param {Buffer} aad An `Option` to be used for AAD algorithm.
+   * @throws {Error} If subject decryption failed.
+   * @returns {ArrayBuffer} {@link ArrayBuffer} with decrypted data.
+   */
+  decrypt(keyReference: string, subject: Buffer, aad: Buffer): ArrayBuffer
+
+  /**
+   * Performs ECDH Key Agreement.
+   *
+   * @param {string} keyReference Private key ref for ECDH.
+   * @param {Buffer} otherKey Other public key for ECDH.
+   * @throws {Error} If ECDH Key Agreement processing failed.
+   * @returns {ArrayBuffer} {@link ArrayBuffer} with key agreement resulting key.
+   */
+  ecdhKeyAgreement(keyReference: string, otherKey: Buffer): ArrayBuffer
+
+  /**
+   * Create empty, unpopulated DIDComm v2 message.
+   *
+   * @returns {string} DIDComm v2 message as JSON encoded string.
+   */
+  createMessage(): string
+
+  /**
+   * Seal encrypted DIDComm v2 message.
+   *
+   * Keys should be present in wallet for controller `from` property
+   * and `from` and `to` properties must be set correctly.
+   *
+   * @param {object} message {@link object} (message) of type created with 'NativeBindings::createMessage()'.
+   * @returns {string} Encrypted JWE as a {@link string}.
+   */
+  sealEncrypted(message: object): string
+
+  /**
+   * Receive DIDComm v2 message.
+   *
+   * @param {Buffer} message Raw received message bytes.
+   * @param {object} output Execution resulting output.
+   * @return {void}
+   */
+  receiveMessage(message: Buffer, output: object): void
+
+  /**
+   * Seal encrypted DIDComm v2 message as JWE.
+   *
+   * Keys should be present in wallet for controller `from` property
+   * and `from` and `to` properties must be set correctly.
+   *
+   * @param {string} message The message to encrypt.
+   * @returns {string} Encrypted JWE as a {@link string}.
+   */
+  sealJsonMessageJwe(message: string): string
+
+  /**
+   * Seal DIDComm v2 message as JWS.
+   *
+   * Key for signing should be present in wallet for controller `from` property
+   * and `from` should be correctly set in the message prior to signing.
+   *
+   * @param {string} message The message to sign.
+   * @returns {string} Signed JWS as a {@link string}.
+   */
+  sealJsonMessageJws(message: string): string
+
+  /**
+   * Create DIDComm v2 `Message` as XC20P JWE.
+   *
+   * Sets `from` and `to` as well.
+   *
+   * @param {string} from The sender identifier.
+   * @param {string[]} to An array of recipients identifiers.
+   * @returns {string} JSON encoded {@link string} as a `Message` with proper headers set.
+   */
+  createXc20pJwe(from: string, to: string[]): string
+
+  /**
+   * Create DIDComm v2 `Message` as AES256GCM JWE.
+   *
+   * Sets `from` and `to` as well.
+   *
+   * @param {string} from The sender identifier.
+   * @param {string[]} to An array of recipients identifiers.
+   * @returns {string} JSON encoded {@link string} as a `Message` with proper headers set.
+   */
+  createAes256GcmJwe(from: string, to: string[]): string
 }
