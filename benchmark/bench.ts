@@ -1,7 +1,9 @@
-import b from 'benny'
+import b, { add } from 'benny'
 
 import { Buffer } from 'buffer'
+import { Wallet } from '../ts'
 import bindings from '../ts/bindings'
+import { NativeBindings } from '../ts/types'
 
 const encodePassword = (password: string) => Buffer.from(password, 'utf-8').toString('base64')
 
@@ -14,32 +16,29 @@ function run() {
   b.suite(
     'Attach and detach',
 
-    b.add('Wallet attach', () => {
-      const password = encodePassword('alice')
-
-      return () => {
-        const wallet = {
-          attach: bindings.attach,
-        }
-
-        wallet.attach(encodedWallets.alice, 'alice', password)
-      }
-    }),
-
     b.add('Wallet attach and detach', () => {
       const password = encodePassword('bob')
-      const wallet = {
-        attach: bindings.attach,
-      }
-      wallet.attach(encodedWallets.bob, 'bob', password)
 
       return () => {
         const wallet = {
           attach: bindings.attach,
+          add_key: bindings.newX25519Key,
           detach: bindings.detach,
         }
 
         wallet.attach(encodedWallets.bob, 'bob', password)
+        wallet.add_key('bob!')
+        wallet.detach(password)
+      }
+    }),
+
+    b.add('Native bindings class attach and detach', () => {
+      const password = encodePassword('alice')
+
+      return () => {
+        const wallet = new Wallet()
+        wallet.attach(encodedWallets.alice, 'alice', password)
+        wallet.newX25519Key('alice!')
         wallet.detach(password)
       }
     }),
