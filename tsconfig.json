@@ -7,8 +7,12 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "outDir": "./js",
+    "rootDir": ".",
+    "declaration": true,
+    "sourceMap": true
   },
-  "include": ["."],
-  "exclude": ["node_modules"]
+  "include": ["ts"],
+  "exclude": ["test", "node_modules"]
 }

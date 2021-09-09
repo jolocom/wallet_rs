@@ -279,7 +279,7 @@ fn ecdh_key_agreement(ctx: CallContext) -> Result<JsArrayBuffer> {
 fn init(mut exports: JsObject) -> Result<()> {
   exports.create_named_method("attach", attach_wallet)?;
   exports.create_named_method("detach", detach_wallet)?;
-  exports.create_named_method("new", new_wallet)?;
+  exports.create_named_method("create", new_wallet)?;
   exports.create_named_method("newEcdsaSecp1Key", new_ecdsa_secp1_key)?;
   exports.create_named_method("newEcdsaRecoveryKey", new_ecdsa_recovery_key)?;
   exports.create_named_method("newEd256VerificationKey", new_ed256_verification_key)?;
