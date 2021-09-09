@@ -28,10 +28,6 @@ async function run() {
 
     b.add('Wallet attach and detach', () => {
       const password = encodePassword('bob')
-      const wallet = {
-        attach: bindings.attach,
-      }
-      wallet.attach(encodedWallets.bob, 'bob', password)
 
       return () => {
         const wallet = {
