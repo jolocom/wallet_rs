@@ -3,6 +3,7 @@ import { Buffer } from 'buffer'
 import b from 'benny'
 
 import bindings from '../ts/bindings'
+import { Wallet } from '../ts'
 
 const encodePassword = (password: string) => Buffer.from(password, 'utf-8').toString('base64')
 
@@ -12,21 +13,9 @@ const encodedWallets = {
   bob: 'jEq0_YQlP0RMes09TTIOh9guxb7KmNueRVqdM0JSKtyGeXu3zXPJdt7pc7b_XPLeEu3BgOgkqEUx-6gS67Yyem-jVlw0PpFJ9oxlEncGlYYbgZyaXfEe6S5zuxAXBYKld1-PQIWG2V5ZFemoHVQ2DA7lUnNQll4l_Kxtw9wba3lETdY85NnB6r49vgzcigSlPhjW9fNezdKBpUmURSUpQBqJbedvVCTw151hiRPVpbL1572i85cxPRdiUHRpw9T1tsEhKObM9dgEBO-o8YfPYVhzT0AW7cY8XavBWoAumZ13Yx-M0RLzDoMnsIItEJuMjtjt6LfTuIt5Yu0hHu4KzJWeLQb0U2Kbp7pr_n9g601eGqorn5rbJO9TrhG_Ky_YzJzlz_rfV143KKfl_V0eswYoN_b37WiqFX8aRF3IPoJ_Jm8XpsGSgOKafXcWbCwAsgZTOmXjTnesWi6Xb5Aqm1dDab8wATdoaEuT4nBQn402sNqJ-0Cbw9fK2HoH8Si_3qgTU9qdVQF_Q5krhFRq-SaM1JGgeFwB-FP-nQ0yIpDsFX-5RGfPsry-MuOfIwyKhZQpT0uiBOpok1SqXiJLuvXAEbvtSV3oAeddXNq2f6Kl5ipDSHcpR0GqAUOIjGIZMsTiQcqWpwsDedN-WvbQYbZ3p78fnqIymfQm5jmecdvG1MVX_2hbUPA9lUzE2H2y3osuoL5u_zi1wfjXNYaEFv7blimM3mUr3_QPikUwglAzcWX-oAVPPnBxvRQEanQWbvavYGDtpjk_AM2_fcosh1j5vavWxPVHrvFDN_EeetFD2uO-KptnoK4WKv5PphiS7lw8GOmlPFWkAd8WBu7U9ixByTmTWXVzHskFvHU9VS8=',
 }
 
-async function run() {
-  await b.suite(
+function run() {
+  b.suite(
     'Attach and detach',
-
-    b.add('Wallet attach', () => {
-      const password = encodePassword('alice')
-
-      return () => {
-        const wallet = {
-          attach: bindings.attach,
-        }
-
-        wallet.attach(encodedWallets.alice, 'alice', password)
-      }
-    }),
 
     b.add('Wallet attach and detach', () => {
       const password = encodePassword('bob')
@@ -34,10 +23,23 @@ async function run() {
       return () => {
         const wallet = {
           attach: bindings.attach,
+          add_key: bindings.newX25519Key,
           detach: bindings.detach,
         }
 
         wallet.attach(encodedWallets.bob, 'bob', password)
+        wallet.add_key('bob!')
+        wallet.detach(password)
+      }
+    }),
+
+    b.add('Native bindings class attach and detach', () => {
+      const password = encodePassword('alice')
+
+      return () => {
+        const wallet = new Wallet()
+        wallet.attach(encodedWallets.alice, 'alice', password)
+        wallet.newX25519Key('alice!')
         wallet.detach(password)
       }
     }),
@@ -47,6 +49,4 @@ async function run() {
   )
 }
 
-run().catch((e) => {
-  console.error(e)
-})
+run()

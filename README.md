@@ -1,10 +1,10 @@
 # `@jolocom/wallet-rs`
 
-![https://github.com/napi-rs/wallet-rs/actions](https://github.com/napi-rs/wallet-rs/workflows/CI/badge.svg)
+![https://github.com/jolocom/wallet_rs/actions](https://github.com/jolocom/wallet_rs/workflows/CI/badge.svg)
 
 > Template project for writing node package with napi-rs.
 
-## Install this test package
+## Install this package
 
 ```
 yarn add @jolocom/wallet-rs
