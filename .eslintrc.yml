@@ -21,6 +21,8 @@ extends:
   - plugin:sonarjs/recommended
   - plugin:prettier/recommended
 
+ignorePatterns: ["**/js/**/*.js"]
+
 rules:
   # 0 = off, 1 = warn, 2 = error
   'space-before-function-paren': 0
@@ -68,12 +70,14 @@ rules:
 
 overrides:
   - files:
-      - ./**/*.{ts,tsx}
+      - ./ts/*.{ts,tsx}
+      - ./test/*.{ts,tsx}
     rules:
       'no-unused-vars': [2, { varsIgnorePattern: '^_', argsIgnorePattern: '^_', ignoreRestSiblings: true }]
 
   - files:
-      - ./**/*{.ts,.tsx}
+      - ./ts/*{.ts,.tsx}
+      - ./test/*{.ts,.tsx}
     plugins:
       - '@typescript-eslint'
     parserOptions:

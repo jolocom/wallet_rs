@@ -10,7 +10,7 @@ export class Wallet {
    * @return {void}
    */
   attach(lockedWallet: string, login: string, password: string): void {
-     bindings.attach.call(this, lockedWallet, login, password)
+    bindings.attach.call(this, lockedWallet, login, password)
   }
 
   /**

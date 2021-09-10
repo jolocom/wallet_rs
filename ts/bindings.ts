@@ -1,4 +1,5 @@
 import { loadBinding } from '@node-rs/helper'
+
 import { NativeBindings } from './types'
 
 /**
