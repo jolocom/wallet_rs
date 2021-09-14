@@ -119,7 +119,7 @@ pub(crate) fn receive_message(ctx: CallContext) -> Result<JsUndefined> {
     let wallet = super::get_wallet_from_context(&ctx)?;
     let msg_bytes = ctx.get::<JsBuffer>(0)?.into_value()?;
     let mut output = ctx.get::<JsObject>(1)?;
-    ctx.env.wrap(&mut &mut output,
+    ctx.env.wrap(&mut output,
         wallet.unlocked.receive_message(&msg_bytes)
             .map_err(|e| napi::Error::from_reason(e.to_string()))?
     )?;

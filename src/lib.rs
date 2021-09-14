@@ -20,12 +20,6 @@ struct Wallet{
   unlocked: UnlockedWallet
 }
 
-impl Drop for Wallet {
-    fn drop(&mut self) {
-        std::mem::drop(*self.unlocked);
-    }
-}
-
 /// Unlocks locked and encoded wallet into UnlockedWallet instance
 /// # Parameters
 /// * `locked_wallet` - Base64URL encoded encrypted wallet
@@ -72,7 +66,6 @@ fn detach_wallet(ctx: CallContext) -> Result<JsString> {
     let wallet = get_wallet_from_context(&ctx)?;
     let locked = wallet.unlocked.lock(&decode_b64(pass.as_str()?)?)
         .map_err(|e| napi::Error::from_reason(e.to_string()))?;
-    let _ = wallet.unlocked;
     ctx.env.create_string(
       &base64::encode_config(locked.ciphertext,
         base64::URL_SAFE)
@@ -329,13 +322,13 @@ fn b64_test() {
   assert_eq!("alice", &String::from_utf8(dec).unwrap());
 }
 
-// #[test]
-// fn didcomm_seal_receive_test() {
-//     let alice_wallet = 
-//     let message = universal_wallet::create_jwe_message(
-//         "did:key:z6MkiTBz1ymuepAQ4HEHYSF1H8quG5GLVVQR3djdX3mDooWp",
-//         ["did:key:z6MkjchhfUsD6mmvni8mCdXHw216Xrm9bQe2mBH1P5RDjVJG"]
-//         universal_wallet::crypto::CryptoAlgorithm::A256GCM
-//     );
+#[test]
+fn didcomm_seal_receive_test() {
+    let alice_wallet = 
+    let message = universal_wallet::create_jwe_message(
+        "did:key:z6MkiTBz1ymuepAQ4HEHYSF1H8quG5GLVVQR3djdX3mDooWp",
+        ["did:key:z6MkjchhfUsD6mmvni8mCdXHw216Xrm9bQe2mBH1P5RDjVJG"]
+        universal_wallet::crypto::CryptoAlgorithm::A256GCM
+    );
 
-// }
+}
