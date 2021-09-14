@@ -321,14 +321,3 @@ fn b64_test() {
   let dec = base64::decode_config("YWxpY2U=", base64::URL_SAFE).unwrap();
   assert_eq!("alice", &String::from_utf8(dec).unwrap());
 }
-
-#[test]
-fn didcomm_seal_receive_test() {
-    let alice_wallet = 
-    let message = universal_wallet::create_jwe_message(
-        "did:key:z6MkiTBz1ymuepAQ4HEHYSF1H8quG5GLVVQR3djdX3mDooWp",
-        ["did:key:z6MkjchhfUsD6mmvni8mCdXHw216Xrm9bQe2mBH1P5RDjVJG"]
-        universal_wallet::crypto::CryptoAlgorithm::A256GCM
-    );
-
-}
