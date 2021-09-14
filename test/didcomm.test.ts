@@ -44,7 +44,7 @@ test('create jwe message', (t) => {
 
 test('seal', (t) => {
   const wallet = createAndAttachWallet(encodedWallets.alice, 'alice', 'alice')
-  const message = wallet.createAes256GcmJwe('did:key:z6MkiTBz1ymuepAQ4HEHYSF1H8quG5GLVVQR3djdX3mDooWp', [
+  const message = wallet.createXc20pJwe('did:key:z6MkiTBz1ymuepAQ4HEHYSF1H8quG5GLVVQR3djdX3mDooWp', [
     'did:key:z6MkjchhfUsD6mmvni8mCdXHw216Xrm9bQe2mBH1P5RDjVJG',
   ])
   let jwe: any
@@ -61,7 +61,7 @@ test('seal', (t) => {
 test('receive', (t) => {
   const aliceWallet = createAndAttachWallet(encodedWallets.alice, 'alice', 'alice')
   const bobWallet = createAndAttachWallet(encodedWallets.bob, 'bob', 'bob')
-  const message = aliceWallet.createAes256GcmJwe('did:key:z6MkiTBz1ymuepAQ4HEHYSF1H8quG5GLVVQR3djdX3mDooWp', [
+  const message = aliceWallet.createXc20pJwe('did:key:z6MkiTBz1ymuepAQ4HEHYSF1H8quG5GLVVQR3djdX3mDooWp', [
     'did:key:z6MkjchhfUsD6mmvni8mCdXHw216Xrm9bQe2mBH1P5RDjVJG',
   ])
   const sealed = aliceWallet.sealJsonMessageJwe(message)
