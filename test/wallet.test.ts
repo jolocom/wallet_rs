@@ -23,8 +23,7 @@ test('new ecdsa sec1p key', (t) => {
   t.plan(2)
   t.notThrows(() => {
     wallet.newEcdsaSecp1Key('did:keri:123456789')
-    const key = {}
-    wallet.getKeyByController('did::keri:123456789', key)
+    const key = wallet.getKeyByController('did:keri:123456789')
     t.assert(key)
   })
 })
@@ -35,8 +34,7 @@ test('new x25519 key', (t) => {
   t.plan(2)
   t.notThrows(() => {
     wallet.newX25519Key('did:bob:marleY')
-    const key = {}
-    wallet.getKeyByController('did:bob:marleY', key)
+    const key = wallet.getKeyByController('did:bob:marleY')
     t.assert(key)
   })
 })

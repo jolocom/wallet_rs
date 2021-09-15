@@ -152,13 +152,17 @@ fn new_wallet(ctx: CallContext) -> Result<JsUndefined> {
 fn get_key(ctx: CallContext) -> Result<JsString> {
     let wallet = get_wallet_from_context(&ctx)?;
     let key_ref = ctx.get::<JsString>(0)?.into_utf8()?;
-    ctx
-      .env
-      .create_string(
-          &serde_json::to_string(
-              &wallet.unlocked.get_key(key_ref.as_str()?)
-          ).map_err(|e| napi::Error::from_reason(e.to_string()))?
-      )
+    match wallet.unlocked.get_key(key_ref.as_str()?) {
+        Some(content) =>
+            ctx
+              .env
+              .create_string(
+                  &serde_json::to_string(
+                      &content
+                  ).map_err(|e| napi::Error::from_reason(e.to_string()))?
+              ),
+        None => Err(napi::Error::from_reason(format!("Key not found for {}", key_ref.as_str()?)))
+    }
 }
 
 /// Fetch key as `ContentEntry` from the wallet into JS by controller
@@ -169,13 +173,17 @@ fn get_key(ctx: CallContext) -> Result<JsString> {
 fn get_key_by_controller(ctx: CallContext) -> Result<JsString> {
     let wallet = get_wallet_from_context(&ctx)?;
     let controller = ctx.get::<JsString>(0)?.into_utf8()?;
-    ctx
-      .env
-      .create_string(
-          &serde_json::to_string(
-              &wallet.unlocked.get_key_by_controller(controller.as_str()?)
-          ).map_err(|e| napi::Error::from_reason(e.to_string()))?
-      )
+    match wallet.unlocked.get_key_by_controller(controller.as_str()?) {
+        Some(content) => 
+            ctx
+              .env
+              .create_string(
+                  &serde_json::to_string(
+                      &content
+                  ).map_err(|e| napi::Error::from_reason(e.to_string()))?
+              ),
+        None => Err(napi::Error::from_reason(format!("Key not found for {}", controller.as_str()?)))
+    }
 }
 
 /// Sets controller of `key_ref` to `controller` value
