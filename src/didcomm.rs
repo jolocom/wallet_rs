@@ -1,4 +1,4 @@
-use napi::{CallContext, ContextlessResult, Env, JsBuffer, JsObject, JsString, JsUndefined, Result};
+use napi::{CallContext, ContextlessResult, Env, JsBuffer, JsObject, JsString, Result};
 use universal_wallet::{didcomm_rs::{Message, crypto::CryptoAlgorithm}, unlocked::*};
 
 /// Create empty, unpopulated DIDComm v2 message
@@ -114,14 +114,15 @@ pub(crate) fn seal_signed_str(ctx: CallContext) -> Result<JsString> {
 /// * `msg_bytes` - [Buffer of bytes \ &[u8]] - raw received message bytes
 /// * `&mut output` - [JsObject \ Message] result will be put into this object
 ///
-#[js_function(2)]
-pub(crate) fn receive_message(ctx: CallContext) -> Result<JsUndefined> {
+#[js_function(1)]
+pub(crate) fn receive_message(ctx: CallContext) -> Result<JsString> {
     let wallet = super::get_wallet_from_context(&ctx)?;
     let msg_bytes = ctx.get::<JsBuffer>(0)?.into_value()?;
-    let mut output = ctx.get::<JsObject>(1)?;
-    ctx.env.wrap(&mut output,
-        wallet.unlocked.receive_message(&msg_bytes)
+    ctx.env.create_string(
+        &serde_json::to_string(
+            &wallet.unlocked.receive_message(&msg_bytes)
+                .map_err(|e| napi::Error::from_reason(e.to_string()))?
+        )
             .map_err(|e| napi::Error::from_reason(e.to_string()))?
-    )?;
-    ctx.env.get_undefined()
+    )
 }
