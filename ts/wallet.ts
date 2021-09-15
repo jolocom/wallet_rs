@@ -117,22 +117,20 @@ export class Wallet {
    * Fetch key as `ContentEntry` from the wallet into JS.
    *
    * @param {string} keyReference Search string to the key to fetch.
-   * @param {object} output Where search result will be stored to.
-   * @return {void}
+   * @return {object} one of the universal_wallet::Content variants
    */
-  getKey(keyReference: string, output: object): void {
-    bindings.getKey.call(this, keyReference, output)
+  getKey(keyReference: string): object {
+    return JSON.parse(bindings.getKey.call(this, keyReference))
   }
 
   /**
    * Fetch key as `ContentEntry` from the wallet into JS by controller.
    *
    * @param {string} controller The controller we want to get content for.
-   * @param {object} output Where search result will be stored to.
-   * @return {void}
+   * @return {object} one of the universal_wallet::Content variants
    */
-  getKeyByController(controller: string, output: object): void {
-    bindings.getKeyByController.call(this, controller, output)
+  getKeyByController(controller: string): string {
+    return JSON.parse(bindings.getKeyByController.call(this, controller))
   }
 
   /**
@@ -210,11 +208,10 @@ export class Wallet {
    * Receive DIDComm v2 message.
    *
    * @param {Buffer} message Raw received message bytes.
-   * @param {object} output Execution resulting output.
-   * @return {void}
+   * @return {object} didcomm V2 Message.
    */
-  receiveMessage(message: Buffer, output: object): void {
-    bindings.receiveMessage.call(this, message, output)
+  receiveMessage(message: Buffer, ): object {
+    return JSON.parse(bindings.receiveMessage.call(this, message))
   }
 
   /**

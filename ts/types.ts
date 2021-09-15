@@ -93,19 +93,17 @@ export interface NativeBindings {
    * Fetch key as `ContentEntry` from the wallet into JS.
    *
    * @param {string} keyReference Search string to the key to fetch.
-   * @param {object} output Where search result will be stored to.
    * @return {void}
    */
-  getKey: (keyReference: string, output: object) => void
+  getKey: (keyReference: string) => string
 
   /**
    * Fetch key as `ContentEntry` from the wallet into JS by controller.
    *
    * @param {string} controller The controller we want to get content for.
-   * @param {object} output Where search result will be stored to.
    * @return {void}
    */
-  getKeyByController: (controller: string, output: {}) => void
+  getKeyByController: (controller: string) => string
 
   /**
    * Sets controller of `keyReference` to `controller` value.
@@ -170,10 +168,9 @@ export interface NativeBindings {
    * Receive DIDComm v2 message.
    *
    * @param {Buffer} message Raw received message bytes.
-   * @param {object} output Execution resulting output.
-   * @return {void}
+   * @return {string} JSON serialized dicomm V2 Message.
    */
-  receiveMessage: (message: Buffer, output: object) => void
+  receiveMessage: (message: Buffer) => string
 
   /**
    * Seal encrypted DIDComm v2 message as JWE.

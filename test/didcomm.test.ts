@@ -65,11 +65,11 @@ test('receive', (t) => {
     'did:key:z6MkjchhfUsD6mmvni8mCdXHw216Xrm9bQe2mBH1P5RDjVJG',
   ])
   const sealed = aliceWallet.sealJsonMessageJwe(message)
-  const received = {}
+  let received = {}
 
   t.plan(4)
   t.notThrows(() => {
-    bobWallet.receiveMessage(Buffer.from(sealed), received)
+    received = bobWallet.receiveMessage(Buffer.from(sealed))
   })
   t.truthy(Object.prototype.hasOwnProperty.call(received, 'data'))
   t.is((received as { from: string }).from, 'did:key:z6MkiTBz1ymuepAQ4HEHYSF1H8quG5GLVVQR3djdX3mDooWp')

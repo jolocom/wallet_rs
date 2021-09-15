@@ -147,39 +147,35 @@ fn new_wallet(ctx: CallContext) -> Result<JsUndefined> {
 /// Fetch key as `ContentEntry` from the wallet into JS
 /// # Parameters
 /// * `key_ref` - [String] search string to the key to fetch
-/// * `mut output` - [JsObject] where search result will be stored to
 ///
-#[js_function(2)]
-fn get_key(ctx: CallContext) -> Result<JsUndefined> {
+#[js_function(1)]
+fn get_key(ctx: CallContext) -> Result<JsString> {
     let wallet = get_wallet_from_context(&ctx)?;
     let key_ref = ctx.get::<JsString>(0)?.into_utf8()?;
-    let mut output = ctx.get::<JsObject>(1)?;
     ctx
       .env
-      .wrap(
-        &mut output,
-        wallet.unlocked.get_key(key_ref.as_str()?)
-      )?;
-    ctx.env.get_undefined()
+      .create_string(
+          &serde_json::to_string(
+              &wallet.unlocked.get_key(key_ref.as_str()?)
+          ).map_err(|e| napi::Error::from_reason(e.to_string()))?
+      )
 }
 
 /// Fetch key as `ContentEntry` from the wallet into JS by controller
 /// # Parameters
 /// * `controller` - [String] of the controller we want to get content for
-/// * `&mut output` - [JsObject] where search result will be stored to
 ///
-#[js_function(2)]
-fn get_key_by_controller(ctx: CallContext) -> Result<JsUndefined> {
+#[js_function(1)]
+fn get_key_by_controller(ctx: CallContext) -> Result<JsString> {
     let wallet = get_wallet_from_context(&ctx)?;
     let controller = ctx.get::<JsString>(0)?.into_utf8()?;
-    let mut output = ctx.get::<JsObject>(1)?;
     ctx
       .env
-      .wrap(
-        &mut output,
-        wallet.unlocked.get_key_by_controller(controller.as_str()?)
-      )?;
-    ctx.env.get_undefined()
+      .create_string(
+          &serde_json::to_string(
+              &wallet.unlocked.get_key_by_controller(controller.as_str()?)
+          ).map_err(|e| napi::Error::from_reason(e.to_string()))?
+      )
 }
 
 /// Sets controller of `key_ref` to `controller` value

@@ -112,7 +112,6 @@ pub(crate) fn seal_signed_str(ctx: CallContext) -> Result<JsString> {
 /// Receive DIDComm v2 message
 /// # Parameters
 /// * `msg_bytes` - [Buffer of bytes \ &[u8]] - raw received message bytes
-/// * `&mut output` - [JsObject \ Message] result will be put into this object
 ///
 #[js_function(1)]
 pub(crate) fn receive_message(ctx: CallContext) -> Result<JsString> {
