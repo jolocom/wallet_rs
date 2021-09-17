@@ -3,7 +3,7 @@
 extern crate napi_derive;
 
 use napi::{CallContext, JsArrayBuffer, JsBuffer, JsObject, JsString, JsUndefined, Result};
-use universal_wallet::{locked::LockedWallet, prelude::KeyType, unlocked::UnlockedWallet};
+use universal_wallet::{locked::LockedWallet, prelude::{Content, KeyType}, unlocked::UnlockedWallet};
 
 mod didcomm;
 
@@ -279,6 +279,29 @@ fn ecdh_key_agreement(ctx: CallContext) -> Result<JsArrayBuffer> {
     Ok(ctx.env.create_arraybuffer_with_data(agreement)?.into_raw())
 }
 
+/// Adds `universal_wallet::contents::Content` into current wallet
+///
+/// # Parameters
+///
+/// * str_content - JSON serialized Content to be added
+///
+/// Return JSON serialized `universal_wallet::contents::ContentEntry` on success
+/// 
+#[js_function(1)]
+fn add_content(ctx: CallContext) -> Result<JsString> {
+    let wallet = get_wallet_from_context(&ctx)?;
+    let str_content = ctx.get::<JsString>(0)?.into_utf8()?;
+    let content: Content = serde_json::from_str(&str_content.as_str()?)
+        .map_err(|e| napi::Error::from_reason(e.to_string()))?;
+    match wallet.unlocked.import_content(&content) {
+        Some(ce) => ctx.env.create_string(
+            &serde_json::to_string(&ce)
+                .map_err(|e| napi::Error::from_reason(e.to_string()))?
+        ),
+        None => Err(napi::Error::from_reason("failed to add content to the wallet :(".into()))
+    }
+}
+
 #[module_exports]
 fn init(mut exports: JsObject) -> Result<()> {
   exports.create_named_method("attach", attach_wallet)?;
@@ -297,6 +320,7 @@ fn init(mut exports: JsObject) -> Result<()> {
   exports.create_named_method("setKeyController", set_key_controller)?;
   exports.create_named_method("signRaw", sign_raw)?;
   exports.create_named_method("decrypt", decrypt)?;
+  exports.create_named_method("addContent", add_content)?;
   exports.create_named_method("ecdhKeyAgreement", ecdh_key_agreement)?;
   exports.create_named_method("createMessage", didcomm::create_message)?;
   exports.create_named_method("sealEncrypted", didcomm::seal_encrypted)?;
