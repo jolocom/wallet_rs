@@ -42,7 +42,7 @@ fn attach_wallet(ctx: CallContext) -> Result<JsUndefined> {
 
     let mut this: JsObject = ctx.this_unchecked();
 
-    let wallet = LockedWallet::new(&login.as_str()?, decode_b64(locked_wallet.as_str()?)?);
+    let wallet = LockedWallet::new(login.as_str()?, decode_b64(locked_wallet.as_str()?)?);
     ctx.env.wrap(
         &mut this,
         Wallet {
@@ -309,7 +309,7 @@ fn ecdh_key_agreement(ctx: CallContext) -> Result<JsArrayBuffer> {
 fn add_content(ctx: CallContext) -> Result<JsString> {
     let wallet = get_wallet_from_context(&ctx)?;
     let str_content = ctx.get::<JsString>(0)?.into_utf8()?;
-    let content: Content = serde_json::from_str(&str_content.as_str()?)
+    let content: Content = serde_json::from_str(str_content.as_str()?)
         .map_err(|e| napi::Error::from_reason(e.to_string()))?;
     match wallet.unlocked.import_content(&content) {
         Some(ce) => ctx.env.create_string(
@@ -355,8 +355,8 @@ fn init(mut exports: JsObject) -> Result<()> {
 }
 
 pub(crate) fn get_wallet_from_context<'ctx>(ctx: &'ctx CallContext) -> Result<&'ctx mut Wallet> {
-    let mut this: JsObject = ctx.this_unchecked();
-    ctx.env.unwrap::<Wallet>(&mut this)
+    let this: JsObject = ctx.this_unchecked();
+    ctx.env.unwrap::<Wallet>(&this)
 }
 
 fn decode_b64(data: &str) -> Result<Vec<u8>> {

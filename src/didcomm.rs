@@ -45,7 +45,7 @@ fn create_jwe(ctx: CallContext, alg: CryptoAlgorithm) -> Result<JsString> {
     if len == 0 {
         return Err(napi::Error::from_reason(
             "'to' array must have at least one recipient".into(),
-        ))?;
+        ));
     }
     let mut to: Vec<String> = Vec::with_capacity(len as usize);
     for index in 0..len {
@@ -73,8 +73,8 @@ fn create_jwe(ctx: CallContext, alg: CryptoAlgorithm) -> Result<JsString> {
 #[js_function(1)]
 pub(crate) fn seal_encrypted(ctx: CallContext) -> Result<JsString> {
     let wallet = super::get_wallet_from_context(&ctx)?;
-    let mut js_message = ctx.get::<JsObject>(0)?;
-    let message: &mut Message = ctx.env.unwrap(&mut js_message)?;
+    let js_message = ctx.get::<JsObject>(0)?;
+    let message: &mut Message = ctx.env.unwrap(&js_message)?;
     ctx.env.create_string(
         &wallet
             .unlocked
