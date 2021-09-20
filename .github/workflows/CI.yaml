@@ -64,7 +64,7 @@ jobs:
             target: 'armv7-unknown-linux-gnueabihf'
             setup: |
               sudo apt-get install gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf -y
-            build: yarn build --target=armv7-unknown-linux-gnueabihf
+            build: yarn build
           - host: ubuntu-latest
             target: 'aarch64-linux-android'
             build: |
