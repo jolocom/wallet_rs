@@ -159,10 +159,10 @@ export interface NativeBindings {
    * Keys should be present in wallet for controller `from` property
    * and `from` and `to` properties must be set correctly.
    *
-   * @param {object} message {@link object} (message) of type created with 'NativeBindings::createMessage()'.
+   * @param {Record<string, unknown>} message of type created with 'NativeBindings::createMessage()'.
    * @returns {string} Encrypted JWE as a {@link string}.
    */
-  sealEncrypted: (message: object) => string
+  sealEncrypted: (message: Record<string, unknown>) => string
 
   /**
    * Receive DIDComm v2 message.

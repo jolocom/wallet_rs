@@ -117,9 +117,9 @@ export class Wallet {
    * Fetch key as `ContentEntry` from the wallet into JS.
    *
    * @param {string} keyReference Search string to the key to fetch.
-   * @return {object} one of the universal_wallet::Content variants
+   * @return {Record<string, unknown>} one of the universal_wallet::Content variants
    */
-  getKey(keyReference: string): object {
+  getKey(keyReference: string): Record<string, unknown> {
     return JSON.parse(bindings.getKey.call(this, keyReference))
   }
 
@@ -127,9 +127,9 @@ export class Wallet {
    * Fetch key as `ContentEntry` from the wallet into JS by controller.
    *
    * @param {string} controller The controller we want to get content for.
-   * @return {object} one of the universal_wallet::Content variants
+   * @return {Record<string, unknown>} one of the universal_wallet::Content variants
    */
-  getKeyByController(controller: string): object {
+  getKeyByController(controller: string): Record<string, unknown> {
     return JSON.parse(bindings.getKeyByController.call(this, controller))
   }
 
@@ -197,10 +197,10 @@ export class Wallet {
    * Keys should be present in wallet for controller `from` property
    * and `from` and `to` properties must be set correctly.
    *
-   * @param {object} message {@link object} (message) of type created with 'NativeBindings::createMessage()'.
+   * @param {Record<string, unknown>} message of type created with 'NativeBindings::createMessage()'.
    * @returns {string} Encrypted JWE as a {@link string}.
    */
-  sealEncrypted(message: object): string {
+  sealEncrypted(message: Record<string, unknown>): string {
     return bindings.sealEncrypted.call(this, message)
   }
 
@@ -208,9 +208,9 @@ export class Wallet {
    * Receive DIDComm v2 message.
    *
    * @param {Buffer} message Raw received message bytes.
-   * @return {object} didcomm V2 Message.
+   * @return {Record<string, unknown>} didcomm V2 Message.
    */
-  receiveMessage(message: Buffer): object {
+  receiveMessage(message: Buffer): Record<string, unknown> {
     return JSON.parse(bindings.receiveMessage.call(this, message))
   }
 
