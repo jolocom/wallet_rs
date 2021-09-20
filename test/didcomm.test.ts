@@ -5,17 +5,13 @@ import { Wallet } from '../ts'
 import { encodedWallets } from './fixture'
 import { encodePassword } from './utils'
 
-let walletsToDetach: Wallet[] = []
+const walletsToDetach: Wallet[] = []
 
 test.afterEach(() => {
-  do {
-    let wallet = walletsToDetach.pop()
-    if (wallet) {
-      wallet.detach(encodePassword('something'))
-    } else {
-      break
-    }
-  } while (true)
+  for (const wallet of walletsToDetach) {
+    wallet.detach(encodePassword('something'))
+    walletsToDetach.splice(walletsToDetach.indexOf(wallet), 1)
+  }
 })
 
 test('create empty message', (t) => {
@@ -54,8 +50,8 @@ test('seal', (t) => {
     const sealed = wallet.sealJsonMessageJwe(message)
     jwe = JSON.parse(sealed)
   })
-  t.true(Object.prototype.hasOwnProperty.call(jwe, 'from'))
-  t.is((jwe as { from: string }).from, 'did:key:z6MkiTBz1ymuepAQ4HEHYSF1H8quG5GLVVQR3djdX3mDooWp')
+  t.true(Object.prototype.hasOwnProperty.call(jwe, 'skid'))
+  t.is((jwe as { skid: string }).skid, 'did:key:z6MkiTBz1ymuepAQ4HEHYSF1H8quG5GLVVQR3djdX3mDooWp')
 })
 
 test('receive', (t) => {
@@ -71,9 +67,9 @@ test('receive', (t) => {
   t.notThrows(() => {
     received = bobWallet.receiveMessage(Buffer.from(sealed))
   })
-  t.truthy(Object.prototype.hasOwnProperty.call(received, 'data'))
-  t.is((received as { from: string }).from, 'did:key:z6MkiTBz1ymuepAQ4HEHYSF1H8quG5GLVVQR3djdX3mDooWp')
+  t.truthy(Object.prototype.hasOwnProperty.call(received, 'body'))
   t.truthy(Object.prototype.hasOwnProperty.call(received, 'from'))
+  t.is((received as { from: string }).from, 'did:key:z6MkiTBz1ymuepAQ4HEHYSF1H8quG5GLVVQR3djdX3mDooWp')
 })
 
 const createAndAttachWallet = (encodedWallet: string, login: string, password: string) => {
