@@ -53,7 +53,7 @@
     "format:rs": "cargo fmt",
     "format:source": "prettier --config ./package.json --write './**/*.{js,ts}'",
     "format:yaml": "prettier --parser yaml --write './**/*.{yml,yaml}'",
-    "lint": "eslint . -c ./.eslintrc.yml './**/*.{ts,tsx,js}'",
+    "lint": "eslint . -c ./.eslintrc.yml",
     "prepublishOnly": "napi prepublish -t npm",
     "test": "ava",
     "version": "napi version"
