@@ -129,7 +129,7 @@ export class Wallet {
    * @param {string} controller The controller we want to get content for.
    * @return {object} one of the universal_wallet::Content variants
    */
-  getKeyByController(controller: string): string {
+  getKeyByController(controller: string): object {
     return JSON.parse(bindings.getKeyByController.call(this, controller))
   }
 
@@ -210,7 +210,7 @@ export class Wallet {
    * @param {Buffer} message Raw received message bytes.
    * @return {object} didcomm V2 Message.
    */
-  receiveMessage(message: Buffer, ): object {
+  receiveMessage(message: Buffer): object {
     return JSON.parse(bindings.receiveMessage.call(this, message))
   }
 
