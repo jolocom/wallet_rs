@@ -13,6 +13,6 @@
     "declaration": true,
     "sourceMap": true
   },
-  "include": ["ts"],
-  "exclude": ["test", "node_modules"]
+  "include": ["ts", "benchmark", "test"],
+  "exclude": ["node_modules"]
 }

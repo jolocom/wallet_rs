@@ -7,7 +7,7 @@ export interface NativeBindings {
    * @param {string} password Base64 encoded password to unlock wallet.
    * @return {void}
    */
-  attach(lockedWallet: string, login: string, password: string): void
+  attach: (lockedWallet: string, login: string, password: string) => void
 
   /**
    * Locks wallet and returns locked wallet as B64URL string.
@@ -15,7 +15,7 @@ export interface NativeBindings {
    * @param {string} password The password for locking. Must be B64URL encoded.
    * @return {string} Locked wallet as B64URL string.
    */
-  detach(password: string): string
+  detach: (password: string) => string
 
   /**
    * Instantiates new and empty wallet into JS context.
@@ -23,7 +23,7 @@ export interface NativeBindings {
    * @param {string} id The id of newly created wallet. Used later to lock/unlock the wallet.
    * @return {void}
    */
-  create(id: string): void
+  create: (id: string) => void
 
   /**
    * Adds key pair of selected type to unlocked wallet.
@@ -31,7 +31,7 @@ export interface NativeBindings {
    * @param {string} controller The name of the key controller.
    * @return {void}
    */
-  newEcdsaSecp1Key(controller: string): void
+  newEcdsaSecp1Key: (controller: string) => void
 
   /**
    * Adds key pair of selected type to unlocked wallet.
@@ -39,7 +39,7 @@ export interface NativeBindings {
    * @param {string} controller The name of the key controller.
    * @return {void}
    */
-  newEcdsaRecoveryKey(controller: string): void
+  newEcdsaRecoveryKey: (controller: string) => void
 
   /**
    * Adds key pair of selected type to unlocked wallet.
@@ -47,7 +47,7 @@ export interface NativeBindings {
    * @param {string} controller The name of the key controller.
    * @return {void}
    */
-  newEd256VerificationKey(controller: string): void
+  newEd256VerificationKey: (controller: string) => void
 
   /**
    * Adds key pair of selected type to unlocked wallet.
@@ -55,7 +55,7 @@ export interface NativeBindings {
    * @param {string} controller The name of the key controller.
    * @return {void}
    */
-  newGpgVerificationKey(controller: string): void
+  newGpgVerificationKey: (controller: string) => void
 
   /**
    * Adds key pair of selected type to unlocked wallet.
@@ -63,7 +63,7 @@ export interface NativeBindings {
    * @param {string} controller The name of the key controller.
    * @return {void}
    */
-  newJwsVerificationKey(controller: string): void
+  newJwsVerificationKey: (controller: string) => void
 
   /**
    * Adds key pair of selected type to unlocked wallet.
@@ -71,7 +71,7 @@ export interface NativeBindings {
    * @param {string} controller The name of the key controller.
    * @return {void}
    */
-  newRsaVerificationKey(controller: string): void
+  newRsaVerificationKey: (controller: string) => void
 
   /**
    * Adds key pair of selected type to unlocked wallet.
@@ -79,7 +79,7 @@ export interface NativeBindings {
    * @param {string} controller The name of the key controller.
    * @return {void}
    */
-  newSchnorrSecp256k1Key(controller: string): void
+  newSchnorrSecp256k1Key: (controller: string) => void
 
   /**
    * Adds key pair of selected type to unlocked wallet.
@@ -87,25 +87,23 @@ export interface NativeBindings {
    * @param {string} controller The name of the key controller.
    * @return {void}
    */
-  newX25519Key(controller: string): void
+  newX25519Key: (controller: string) => void
 
   /**
    * Fetch key as `ContentEntry` from the wallet into JS.
    *
    * @param {string} keyReference Search string to the key to fetch.
-   * @param {object} output Where search result will be stored to.
    * @return {void}
    */
-  getKey(keyReference: string, output: object): void
+  getKey: (keyReference: string) => string
 
   /**
    * Fetch key as `ContentEntry` from the wallet into JS by controller.
    *
    * @param {string} controller The controller we want to get content for.
-   * @param {object} output Where search result will be stored to.
    * @return {void}
    */
-  getKeyByController(controller: string, output: object): void
+  getKeyByController: (controller: string) => string
 
   /**
    * Sets controller of `keyReference` to `controller` value.
@@ -115,7 +113,7 @@ export interface NativeBindings {
    * @throws {Error} If any of the parameters is an empty string.
    * @return {void}
    */
-  setKeyController(keyReference: string, controller: string): void
+  setKeyController: (keyReference: string, controller: string) => void
 
   /**
    * Sign arbitrary data with referred key and return signature.
@@ -125,7 +123,7 @@ export interface NativeBindings {
    * @throws {Error} If signing process unsuccessful (Provided reference is empty string or data to sign is empty).
    * @returns {ArrayBuffer} {@link ArrayBuffer} with signature.
    */
-  signRaw(keyReference: string, subject: Buffer): ArrayBuffer
+  signRaw: (keyReference: string, subject: Buffer) => ArrayBuffer
 
   /**
    * Decrypts provided cypher text using desired key by reference.
@@ -136,7 +134,7 @@ export interface NativeBindings {
    * @throws {Error} If subject decryption failed.
    * @returns {ArrayBuffer} {@link ArrayBuffer} with decrypted data.
    */
-  decrypt(keyReference: string, subject: Buffer, aad: Buffer): ArrayBuffer
+  decrypt: (keyReference: string, subject: Buffer, aad: Buffer) => ArrayBuffer
 
   /**
    * Performs ECDH Key Agreement.
@@ -146,14 +144,14 @@ export interface NativeBindings {
    * @throws {Error} If ECDH Key Agreement processing failed.
    * @returns {ArrayBuffer} {@link ArrayBuffer} with key agreement resulting key.
    */
-  ecdhKeyAgreement(keyReference: string, otherKey: Buffer): ArrayBuffer
+  ecdhKeyAgreement: (keyReference: string, otherKey: Buffer) => ArrayBuffer
 
   /**
    * Create empty, unpopulated DIDComm v2 message.
    *
    * @returns {string} DIDComm v2 message as JSON encoded string.
    */
-  createMessage(): string
+  createMessage: () => string
 
   /**
    * Seal encrypted DIDComm v2 message.
@@ -161,19 +159,18 @@ export interface NativeBindings {
    * Keys should be present in wallet for controller `from` property
    * and `from` and `to` properties must be set correctly.
    *
-   * @param {object} message {@link object} (message) of type created with 'NativeBindings::createMessage()'.
+   * @param {Record<string, unknown>} message of type created with 'NativeBindings::createMessage()'.
    * @returns {string} Encrypted JWE as a {@link string}.
    */
-  sealEncrypted(message: object): string
+  sealEncrypted: (message: Record<string, unknown>) => string
 
   /**
    * Receive DIDComm v2 message.
    *
    * @param {Buffer} message Raw received message bytes.
-   * @param {object} output Execution resulting output.
-   * @return {void}
+   * @return {string} JSON serialized dicomm V2 Message.
    */
-  receiveMessage(message: Buffer, output: object): void
+  receiveMessage: (message: Buffer) => string
 
   /**
    * Seal encrypted DIDComm v2 message as JWE.
@@ -184,7 +181,7 @@ export interface NativeBindings {
    * @param {string} message The message to encrypt.
    * @returns {string} Encrypted JWE as a {@link string}.
    */
-  sealJsonMessageJwe(message: string): string
+  sealJsonMessageJwe: (message: string) => string
 
   /**
    * Seal DIDComm v2 message as JWS.
@@ -195,7 +192,7 @@ export interface NativeBindings {
    * @param {string} message The message to sign.
    * @returns {string} Signed JWS as a {@link string}.
    */
-  sealJsonMessageJws(message: string): string
+  sealJsonMessageJws: (message: string) => string
 
   /**
    * Create DIDComm v2 `Message` as XC20P JWE.
@@ -206,7 +203,7 @@ export interface NativeBindings {
    * @param {string[]} to An array of recipients identifiers.
    * @returns {string} JSON encoded {@link string} as a `Message` with proper headers set.
    */
-  createXc20pJwe(from: string, to: string[]): string
+  createXc20pJwe: (from: string, to: string[]) => string
 
   /**
    * Create DIDComm v2 `Message` as AES256GCM JWE.
@@ -217,5 +214,5 @@ export interface NativeBindings {
    * @param {string[]} to An array of recipients identifiers.
    * @returns {string} JSON encoded {@link string} as a `Message` with proper headers set.
    */
-  createAes256GcmJwe(from: string, to: string[]): string
+  createAes256GcmJwe: (from: string, to: string[]) => string
 }

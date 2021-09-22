@@ -10,7 +10,7 @@ export class Wallet {
    * @return {void}
    */
   attach(lockedWallet: string, login: string, password: string): void {
-     bindings.attach.call(this, lockedWallet, login, password)
+    bindings.attach.call(this, lockedWallet, login, password)
   }
 
   /**
@@ -117,22 +117,20 @@ export class Wallet {
    * Fetch key as `ContentEntry` from the wallet into JS.
    *
    * @param {string} keyReference Search string to the key to fetch.
-   * @param {object} output Where search result will be stored to.
-   * @return {void}
+   * @return {Record<string, unknown>} one of the universal_wallet::Content variants
    */
-  getKey(keyReference: string, output: object): void {
-    bindings.getKey.call(this, keyReference, output)
+  getKey(keyReference: string): Record<string, unknown> {
+    return JSON.parse(bindings.getKey.call(this, keyReference))
   }
 
   /**
    * Fetch key as `ContentEntry` from the wallet into JS by controller.
    *
    * @param {string} controller The controller we want to get content for.
-   * @param {object} output Where search result will be stored to.
-   * @return {void}
+   * @return {Record<string, unknown>} one of the universal_wallet::Content variants
    */
-  getKeyByController(controller: string, output: object): void {
-    bindings.getKeyByController.call(this, controller, output)
+  getKeyByController(controller: string): Record<string, unknown> {
+    return JSON.parse(bindings.getKeyByController.call(this, controller))
   }
 
   /**
@@ -199,10 +197,10 @@ export class Wallet {
    * Keys should be present in wallet for controller `from` property
    * and `from` and `to` properties must be set correctly.
    *
-   * @param {object} message {@link object} (message) of type created with 'NativeBindings::createMessage()'.
+   * @param {Record<string, unknown>} message of type created with 'NativeBindings::createMessage()'.
    * @returns {string} Encrypted JWE as a {@link string}.
    */
-  sealEncrypted(message: object): string {
+  sealEncrypted(message: Record<string, unknown>): string {
     return bindings.sealEncrypted.call(this, message)
   }
 
@@ -210,11 +208,10 @@ export class Wallet {
    * Receive DIDComm v2 message.
    *
    * @param {Buffer} message Raw received message bytes.
-   * @param {object} output Execution resulting output.
-   * @return {void}
+   * @return {Record<string, unknown>} didcomm V2 Message.
    */
-  receiveMessage(message: Buffer, output: object): void {
-    bindings.receiveMessage.call(this, message, output)
+  receiveMessage(message: Buffer): Record<string, unknown> {
+    return JSON.parse(bindings.receiveMessage.call(this, message))
   }
 
   /**

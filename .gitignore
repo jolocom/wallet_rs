@@ -121,3 +121,5 @@ Cargo.lock
 
 *.node
 js
+
+/benchmark/results
