@@ -126,12 +126,6 @@ jobs:
           path: node_modules
           key: npm-cache-${{ matrix.settings.target }}-node@16-${{ hashFiles('yarn.lock') }}
 
-      - name: Install NDK
-        runs: 
-          using: "composite"
-          steps: 
-        https://dl.google.com/android/repository/android-ndk-r23-linux.zip
-
       - name: Pull latest image
         run: ${{ matrix.settings.docker }}
         env:
