@@ -45,7 +45,7 @@
     "artifacts": "napi artifacts",
     "bench": "node -r @swc-node/register benchmark/bench.ts",
     "build": "yarn build:js && napi build --platform --release",
-    "build:aarch64": "yarn build:js && SDKROOT=$(xcrun -sdk macosx11.1 --show-sdk-path) MACOSX_DEPLOYMENT_TARGET=$(xcrun -sdk macosx11.1 --show-sdk-platform-version) napi build --release --target=aarch64-apple-darwin",
+    "build:aarch64": "yarn build:js && SDKROOT=$(xcrun -sdk macosx11.1 --show-sdk-path) MACOSX_DEPLOYMENT_TARGET=$(xcrun -sdk macosx11.1 --show-sdk-platform-version) napi build --platform --release --target=aarch64-apple-darwin",
     "build:js": "tsc -p ./tsconfig.json",
     "build:debug": "napi build --platform",
     "format": "run-p format:md format:json format:yaml format:source format:rs",
