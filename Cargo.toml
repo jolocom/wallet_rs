@@ -10,7 +10,7 @@ version = "1.0.0"
 crate-type = ["cdylib"]
 
 [dependencies]
-napi = "1"
+napi = "2"
 napi-derive = "2"
 universal_wallet = { version = "0.5", features = ["didcomm"] }
 base64 = "0.13"
