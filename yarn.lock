@@ -91,15 +91,15 @@
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/@napi-rs/cli/-/cli-2.2.0.tgz#0129406192c2dfff6e8fc3de0c8be1d2ec286e3f"
 
-"@napi-rs/triples@^1.0.3":
-  version "1.0.3"
-  resolved "https://registry.npmjs.org/@napi-rs/triples/-/triples-1.0.3.tgz"
+"@napi-rs/triples@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@napi-rs/triples/-/triples-1.1.0.tgz#88c35b72e79a20b79bb4c9b3e2817241a1c9f4f9"
 
-"@node-rs/helper@^1.0.0", "@node-rs/helper@^1.2.1":
-  version "1.2.1"
-  resolved "https://registry.npmjs.org/@node-rs/helper/-/helper-1.2.1.tgz"
+"@node-rs/helper@^1.0.0", "@node-rs/helper@^1.3.0":
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/@node-rs/helper/-/helper-1.3.0.tgz#9326c6c25db045ab827ca9a43ef2f9935d4a9353"
   dependencies:
-    "@napi-rs/triples" "^1.0.3"
+    "@napi-rs/triples" "^1.1.0"
 
 "@nodelib/fs.scandir@2.1.4":
   version "2.1.4"
