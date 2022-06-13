@@ -75,9 +75,9 @@
   version "1.2.0"
   resolved "https://registry.npmjs.org/@humanwhocodes/object-schema/-/object-schema-1.2.0.tgz"
 
-"@napi-rs/cli@^2.9.0":
-  version "2.9.0"
-  resolved "https://registry.yarnpkg.com/@napi-rs/cli/-/cli-2.9.0.tgz#3db950b97ea8f2823021383b89cd2f05addeac3a"
+"@napi-rs/cli@^2.10.0":
+  version "2.10.0"
+  resolved "https://registry.yarnpkg.com/@napi-rs/cli/-/cli-2.10.0.tgz#05edb7618992c256048f9f415a9947a66796b4a5"
 
 "@napi-rs/triples@^1.1.0":
   version "1.1.0"
