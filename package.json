@@ -60,7 +60,7 @@
     "version": "napi version"
   },
   "devDependencies": {
-    "@napi-rs/cli": "^2.11.0",
+    "@napi-rs/cli": "^2.11.4",
     "@swc-node/register": "^1.5.1",
     "@types/benchmark": "^2.1.1",
     "@types/node": "^18.6.4",
