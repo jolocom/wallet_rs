@@ -412,9 +412,9 @@ astral-regex@^2.0.0:
   version "2.0.0"
   resolved "https://registry.npmjs.org/astral-regex/-/astral-regex-2.0.0.tgz"
 
-ava@^4.3.1:
-  version "4.3.1"
-  resolved "https://registry.yarnpkg.com/ava/-/ava-4.3.1.tgz#376a788a5a863c39a9dd2dab9fcbbbcf94bf6c38"
+ava@^4.3.3:
+  version "4.3.3"
+  resolved "https://registry.yarnpkg.com/ava/-/ava-4.3.3.tgz#4ddcb650ed059e4e999a4b640de53ff00f4a008b"
   dependencies:
     acorn "^8.7.1"
     acorn-walk "^8.2.0"
