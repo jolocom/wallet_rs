@@ -107,98 +107,26 @@
     "@nodelib/fs.scandir" "2.1.4"
     fastq "^1.6.0"
 
-"@swc-node/core@^1.9.0":
-  version "1.9.0"
-  resolved "https://registry.yarnpkg.com/@swc-node/core/-/core-1.9.0.tgz#f5208d575c1aed5a2cab7e4c04e46aca34d8c240"
-  dependencies:
-    "@swc/core" "^1.2.172"
+"@swc-node/core@^1.9.1":
+  version "1.9.1"
+  resolved "https://registry.yarnpkg.com/@swc-node/core/-/core-1.9.1.tgz#f86d6be5f97beaff91786f0266734ec85e8456c7"
 
-"@swc-node/register@^1.5.1":
-  version "1.5.1"
-  resolved "https://registry.yarnpkg.com/@swc-node/register/-/register-1.5.1.tgz#8927783c1a53207ded076d8700270f7941aa0305"
+"@swc-node/register@^1.5.2":
+  version "1.5.2"
+  resolved "https://registry.yarnpkg.com/@swc-node/register/-/register-1.5.2.tgz#7a7180a83bcec4fedf08dd60afd985804d358d02"
   dependencies:
-    "@swc-node/core" "^1.9.0"
-    "@swc-node/sourcemap-support" "^0.2.0"
-    colorette "^2.0.16"
+    "@swc-node/core" "^1.9.1"
+    "@swc-node/sourcemap-support" "^0.2.1"
+    colorette "^2.0.19"
     debug "^4.3.4"
     pirates "^4.0.5"
     tslib "^2.4.0"
 
-"@swc-node/sourcemap-support@^0.2.0":
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/@swc-node/sourcemap-support/-/sourcemap-support-0.2.0.tgz#e9079f739921fbe5c49d85791703fcb1540c356b"
+"@swc-node/sourcemap-support@^0.2.1":
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/@swc-node/sourcemap-support/-/sourcemap-support-0.2.1.tgz#56963366a75d606cde7a769b051c3a3339e5e30b"
   dependencies:
     source-map-support "^0.5.21"
-
-"@swc/core-android-arm-eabi@1.2.174":
-  version "1.2.174"
-  resolved "https://registry.yarnpkg.com/@swc/core-android-arm-eabi/-/core-android-arm-eabi-1.2.174.tgz#25cf7d3e22bfbd19e0fcbeecff36f418400482cd"
-
-"@swc/core-android-arm64@1.2.174":
-  version "1.2.174"
-  resolved "https://registry.yarnpkg.com/@swc/core-android-arm64/-/core-android-arm64-1.2.174.tgz#2282d1d1727d8a8083cc7de6b8a882d7a5904050"
-
-"@swc/core-darwin-arm64@1.2.174":
-  version "1.2.174"
-  resolved "https://registry.yarnpkg.com/@swc/core-darwin-arm64/-/core-darwin-arm64-1.2.174.tgz#06d6a8206b632d72dbee9da2eb03f532fff3fa37"
-
-"@swc/core-darwin-x64@1.2.174":
-  version "1.2.174"
-  resolved "https://registry.yarnpkg.com/@swc/core-darwin-x64/-/core-darwin-x64-1.2.174.tgz#32803b267fc26c791575013909237f2639342b29"
-
-"@swc/core-freebsd-x64@1.2.174":
-  version "1.2.174"
-  resolved "https://registry.yarnpkg.com/@swc/core-freebsd-x64/-/core-freebsd-x64-1.2.174.tgz#c75175242cf7b36dfc7cff74c3e23c0f97ec63dc"
-
-"@swc/core-linux-arm-gnueabihf@1.2.174":
-  version "1.2.174"
-  resolved "https://registry.yarnpkg.com/@swc/core-linux-arm-gnueabihf/-/core-linux-arm-gnueabihf-1.2.174.tgz#34421b7a975550a5eac8b343e7796ff98506bf45"
-
-"@swc/core-linux-arm64-gnu@1.2.174":
-  version "1.2.174"
-  resolved "https://registry.yarnpkg.com/@swc/core-linux-arm64-gnu/-/core-linux-arm64-gnu-1.2.174.tgz#65d4fe50738d75498f5be03bbc210aa75df35355"
-
-"@swc/core-linux-arm64-musl@1.2.174":
-  version "1.2.174"
-  resolved "https://registry.yarnpkg.com/@swc/core-linux-arm64-musl/-/core-linux-arm64-musl-1.2.174.tgz#d616cc952ee87fa4adac7429d89deec219c93b5e"
-
-"@swc/core-linux-x64-gnu@1.2.174":
-  version "1.2.174"
-  resolved "https://registry.yarnpkg.com/@swc/core-linux-x64-gnu/-/core-linux-x64-gnu-1.2.174.tgz#edb5f2813fbeeaacd4330466c10cc92c089b8698"
-
-"@swc/core-linux-x64-musl@1.2.174":
-  version "1.2.174"
-  resolved "https://registry.yarnpkg.com/@swc/core-linux-x64-musl/-/core-linux-x64-musl-1.2.174.tgz#45c52bd5202fe48a053c8412575ac86493a8a057"
-
-"@swc/core-win32-arm64-msvc@1.2.174":
-  version "1.2.174"
-  resolved "https://registry.yarnpkg.com/@swc/core-win32-arm64-msvc/-/core-win32-arm64-msvc-1.2.174.tgz#edde9a047bf995ec509c2765054d3c071ec10c4c"
-
-"@swc/core-win32-ia32-msvc@1.2.174":
-  version "1.2.174"
-  resolved "https://registry.yarnpkg.com/@swc/core-win32-ia32-msvc/-/core-win32-ia32-msvc-1.2.174.tgz#ee1c89bdf65c56d6720888f6daaece630a0ab8cd"
-
-"@swc/core-win32-x64-msvc@1.2.174":
-  version "1.2.174"
-  resolved "https://registry.yarnpkg.com/@swc/core-win32-x64-msvc/-/core-win32-x64-msvc-1.2.174.tgz#8efcb2bce3727a91874b88aa5be003da6445db8b"
-
-"@swc/core@^1.2.172":
-  version "1.2.174"
-  resolved "https://registry.yarnpkg.com/@swc/core/-/core-1.2.174.tgz#fbc5d65d37be66591c7de94c7db9b2da16c2e471"
-  optionalDependencies:
-    "@swc/core-android-arm-eabi" "1.2.174"
-    "@swc/core-android-arm64" "1.2.174"
-    "@swc/core-darwin-arm64" "1.2.174"
-    "@swc/core-darwin-x64" "1.2.174"
-    "@swc/core-freebsd-x64" "1.2.174"
-    "@swc/core-linux-arm-gnueabihf" "1.2.174"
-    "@swc/core-linux-arm64-gnu" "1.2.174"
-    "@swc/core-linux-arm64-musl" "1.2.174"
-    "@swc/core-linux-x64-gnu" "1.2.174"
-    "@swc/core-linux-x64-musl" "1.2.174"
-    "@swc/core-win32-arm64-msvc" "1.2.174"
-    "@swc/core-win32-ia32-msvc" "1.2.174"
-    "@swc/core-win32-x64-msvc" "1.2.174"
 
 "@types/benchmark@^2.1.2":
   version "2.1.2"
@@ -646,9 +574,9 @@ color-name@~1.1.4:
   version "1.1.4"
   resolved "https://registry.npmjs.org/color-name/-/color-name-1.1.4.tgz"
 
-colorette@^2.0.16, colorette@^2.0.17:
-  version "2.0.17"
-  resolved "https://registry.yarnpkg.com/colorette/-/colorette-2.0.17.tgz#5dd4c0d15e2984b7433cb4a9f2ead45063b80c47"
+colorette@^2.0.16, colorette@^2.0.17, colorette@^2.0.19:
+  version "2.0.19"
+  resolved "https://registry.yarnpkg.com/colorette/-/colorette-2.0.19.tgz#cdf044f47ad41a0f4b56b3a0d5b4e6e1a2d5a798"
 
 commander@^6.1.0:
   version "6.2.1"
